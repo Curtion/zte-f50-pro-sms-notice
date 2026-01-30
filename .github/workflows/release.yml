@@ -1,0 +1,53 @@
+name: Go
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - name: Create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+      run: |
+        gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${tag}"
+
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: ["386", amd64, arm64]
+        exclude:
+        - goarch: "386"
+          goos: darwin
+        - goarch: arm64
+          goos: windows
+    permissions:
+      contents: write
+      packages: write
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Build Golang
+      uses: wangyoucao577/go-release-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: "https://dl.google.com/go/go1.25.3.linux-amd64.tar.gz"
+        project_path: "./"
+        binary_name: "zte_sms_notice"
+        compress_assets: OFF
+        md5sum: FALSE
