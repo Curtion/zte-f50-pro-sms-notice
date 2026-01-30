@@ -56,7 +56,7 @@ func encryptPassword(password, ld string) string {
 **响应:**
 ```json
 {
-  "result": "0"  // "0" = 成功, "1" = 失败, "5" = 已在别处登录
+  "result": 0  // 0 = 成功, 1 = 失败, 5 = 已在别处登录
 }
 ```
 
@@ -734,11 +734,12 @@ func main() {
 ## 5. 错误处理
 
 常见错误码:
-- `result: "0"` - 成功
-- `result: "1"` - 密码错误
-- `result: "2"` - 用户已存在/重复登录
-- `result: "3"` - 其他错误
-- `result: "5"` - 已在其他设备登录
+- `result: 0` - 登录成功
+- `result: 4` - 登录成功（另一种状态）
+- `result: 1` - 登录失败
+- `result: 2` - 重复登录（用户已在其他地方登录）
+- `result: 3` - 密码错误
+- `result: 5` - 已在LCD端登录
 - `result: "failure"` - 操作失败
 
 ---
