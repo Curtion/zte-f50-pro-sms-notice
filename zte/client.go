@@ -29,7 +29,6 @@ type SMSMessage struct {
 	Number  string
 	Content string
 	Date    string
-	IsNew   bool
 }
 
 // NewClient 创建新的 ZTE 客户端
@@ -225,7 +224,7 @@ func (c *Client) Logout() error {
 
 // GetSMSList 获取短信列表
 // memStore: 0=设备, 1=SIM卡
-// tags: 0=全部, 1=未读, 2=已读, 3=发送, 4=草稿
+// tags: 10=全部, 1=未读
 func (c *Client) GetSMSList(page, pageSize, tags int) ([]SMSMessage, error) {
 	// mem_store=1 表示 SIM 卡存储
 	reqURL := fmt.Sprintf("%s/goform/goform_get_cmd_process?cmd=sms_data_total&page=%d&data_per_page=%d&mem_store=1&tags=%d&order_by=order+by+id+desc&isTest=false",
@@ -271,7 +270,6 @@ func (c *Client) GetSMSList(page, pageSize, tags int) ([]SMSMessage, error) {
 			Number:  m.Number,
 			Content: string(content),
 			Date:    m.Date,
-			IsNew:   m.Tag == "1",
 		})
 	}
 	return messages, nil

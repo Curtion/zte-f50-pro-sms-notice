@@ -177,7 +177,7 @@ GET /goform/goform_get_cmd_process?cmd=sms_data_total&page=0&data_per_page=20&me
 | page | int | 页码，从0开始 |
 | data_per_page | int | 每页数量 |
 | mem_store | int | 存储位置: 0=设备, 1=SIM卡 |
-| tags | int | 标签筛选: 0=全部, 1=未读, 2=已读, 3=发送, 4=草稿 |
+| tags | int | 标签筛选: 10=全部, 1=未读 |
 | order_by | string | 排序方式 |
 | isTest | string | "false" |
 
@@ -190,7 +190,7 @@ GET /goform/goform_get_cmd_process?cmd=sms_data_total&page=0&data_per_page=20&me
       "number": "13800138000",           // 发送方号码
       "content": "5L2g5aW9",             // Base64编码的短信内容
       "date": "24,12,25,10,30,00",       // 日期: YY,MM,DD,HH,MM,SS
-      "tag": "0",                        // 0=已读, 1=未读
+      "tag": "0",                        // 0=已读, 1=未读, 2=已发送
       "draft_group_id": "0",
       "received_all_concat_sms": "1"     // 1=完整长短信
     }

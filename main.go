@@ -20,7 +20,7 @@ func main() {
 		barkKeys = flag.String("b", "", "Bark 通知 key，多设备用英文逗号分隔")
 		sound    = flag.String("s", "healthnotification", "Bark 通知铃声名称")
 		baseURL  = flag.String("url", "http://192.168.0.1", "中兴 F50Pro 地址")
-		interval = flag.Int("i", 60, "检查短信间隔（秒）")
+		interval = flag.Int("i", 3, "检查短信间隔（秒）")
 	)
 	flag.Parse()
 
