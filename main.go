@@ -70,12 +70,12 @@ func main() {
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
 	// 立即执行一次检查
-	checkAndNotify(zteClient, barkClient, notifiedIDs)
+	checkAndNotify(zteClient, barkClient, notifiedIDs, *password)
 
 	for {
 		select {
 		case <-ticker.C:
-			checkAndNotify(zteClient, barkClient, notifiedIDs)
+			checkAndNotify(zteClient, barkClient, notifiedIDs, *password)
 		case sig := <-sigChan:
 			log.Printf("收到信号 %v，程序退出", sig)
 			// 尝试登出
@@ -89,11 +89,17 @@ func main() {
 	}
 }
 
-func checkAndNotify(zteClient *zte.Client, barkClient *bark.Client, notifiedIDs map[string]bool) {
+func checkAndNotify(zteClient *zte.Client, barkClient *bark.Client, notifiedIDs map[string]bool, password string) {
 	// 检查登录状态
 	if err := zteClient.CheckLogin(); err != nil {
-		log.Printf("登录状态检查失败: %v", err)
-		return
+		log.Printf("登录状态检查失败: %v，尝试重新登录...", err)
+
+		// 尝试重新登录
+		if err := zteClient.Login(password); err != nil {
+			log.Printf("重新登录失败: %v", err)
+			return
+		}
+		log.Println("重新登录成功")
 	}
 
 	// 获取短信列表（只获取未读的 tag=1）
